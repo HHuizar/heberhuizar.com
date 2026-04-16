@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Heber Huizar Contreras — PSO / PAM Operator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0e0c;
+    --bg2: #141510;
+    --bg3: #1a1b16;
+    --surface: #1f201a;
+    --accent: #8aab85;
+    --accent-dim: #5a7556;
+    --accent-glow: rgba(138, 171, 133, 0.08);
+    --text: #e8e4d9;
+    --text-muted: #8a8780;
+    --text-dim: #555450;
+    --border: rgba(138, 171, 133, 0.15);
+    --border-dim: rgba(255, 255, 255, 0.06);
+    --serif: 'DM Serif Display', Georgia, serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --body: 'Source Serif 4', Georgia, serif;
+    --nav-h: 64px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: var(--accent); color: #0d0e0c; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--nav-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+    background: rgba(13, 14, 12, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-dim);
+    z-index: 100;
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: calc(var(--nav-h) + 4rem) clamp(1.5rem, 5vw, 4rem) 6rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border-dim) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.1) 100%);
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-name {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    font-weight: 400;
+    line-height: 1.05;
+    color: var(--text);
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-name em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-subtitle {
+    font-family: var(--body);
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 300;
+    color: var(--text-muted);
+    max-width: 52ch;
+    line-height: 1.6;
+    margin-bottom: 3rem;
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    color: var(--accent);
+    padding: 0.35em 0.9em;
+    border-radius: 2px;
+  }
+
+  .hero-stat {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+
+  .hero-stat span {
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0 clamp(1.5rem, 5vw, 4rem);
+  }
+
+  /* ── SECTION ── */
+  section {
+    padding: 6rem clamp(1.5rem, 5vw, 4rem);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.15;
+    margin-bottom: 3rem;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .about-body p {
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+    font-size: 1.0625rem;
+    font-weight: 300;
+  }
+
+  .about-body p:last-child { margin-bottom: 0; }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border-dim);
+    border: 1px solid var(--border-dim);
+  }
+
+  .stat-cell {
+    background: var(--surface);
+    padding: 1.5rem;
+  }
+
+  .stat-number {
+    font-family: var(--mono);
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--text);
+    line-height: 1;
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  /* ── EXPERIENCE ── */
+  .experience-list { display: flex; flex-direction: column; gap: 0; }
+
+  .exp-item {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 2.5rem;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--border-dim);
+    position: relative;
+  }
+
+  .exp-item::before {
+    content: '';
+    position: absolute;
+    left: 155px;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: var(--border-dim);
+  }
+
+  .exp-period {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 300;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+    padding-top: 0.2rem;
+  }
+
+  .exp-title {
+    font-family: var(--body);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+
+  .exp-org {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .exp-body {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .exp-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .exp-tag {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border: 1px solid var(--border-dim);
+    padding: 0.2em 0.65em;
+    border-radius: 2px;
+  }
+
+  /* ── EDUCATION ── */
+  .edu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border-dim);
+    border: 1px solid var(--border-dim);
+  }
+
+  .edu-card {
+    background: var(--bg2);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .edu-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 2px; height: 100%;
+    background: var(--accent-dim);
+  }
+
+  .edu-degree {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+
+  .edu-institution {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.35rem;
+  }
+
+  .edu-year {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── PUBLICATIONS ── */
+  .pub-list { display: flex; flex-direction: column; gap: 0; }
+
+  .pub-item {
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--border-dim);
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .pub-year-box {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: var(--accent);
+    background: var(--accent-glow);
+    border: 1px solid var(--border);
+    padding: 0.3em 0;
+    text-align: center;
+    letter-spacing: 0.04em;
+    margin-top: 0.2rem;
+  }
+
+  .pub-title {
+    font-family: var(--body);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+    line-height: 1.5;
+  }
+
+  .pub-source {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+    font-style: italic;
+  }
+
+  /* ── GALLERY ── */
+  #gallery { max-width: 100%; padding-left: 0; padding-right: 0; }
+
+  #gallery .inner {
+    padding: 6rem clamp(1.5rem, 5vw, 4rem);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+
+  .gallery-item {
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    background: var(--surface);
+  }
+
+  .gallery-item.tall { aspect-ratio: 4/5; }
+  .gallery-item.wide { grid-column: span 2; aspect-ratio: 16/9; }
+
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.4s;
+    filter: grayscale(15%);
+  }
+
+  .gallery-item:hover img {
+    transform: scale(1.04);
+    filter: grayscale(0%);
+  }
+
+  .gallery-item .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: flex-end;
+    padding: 1rem;
+  }
+
+  .gallery-item:hover .overlay { opacity: 1; }
+
+  .overlay-caption {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+  }
+
+  /* placeholder for missing images */
+  .gallery-item .placeholder {
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: var(--surface);
+  }
+
+  .placeholder-icon {
+    font-size: 1.5rem;
+    opacity: 0.2;
+  }
+
+  .placeholder-text {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  /* ── LIGHTBOX ── */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    cursor: zoom-out;
+  }
+
+  .lightbox.active { display: flex; }
+
+  .lightbox img {
+    max-width: 90vw;
+    max-height: 85vh;
+    object-fit: contain;
+    cursor: default;
+  }
+
+  .lightbox-caption {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 1.5rem; right: 1.5rem;
+    width: 40px; height: 40px;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .lightbox-close:hover { color: var(--accent); border-color: var(--accent); }
+
+  .lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px; height: 44px;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .lightbox-nav:hover { color: var(--accent); border-color: var(--accent); }
+  .lightbox-prev { left: 1.5rem; }
+  .lightbox-next { right: 1.5rem; }
+
+  /* ── CV ── */
+  #cv-section {
+    background: var(--bg2);
+    border-top: 1px solid var(--border-dim);
+    border-bottom: 1px solid var(--border-dim);
+    max-width: 100%;
+  }
+
+  #cv-section .inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 5rem clamp(1.5rem, 5vw, 4rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .cv-text .section-label { margin-bottom: 0.5rem; }
+
+  .cv-text h2 {
+    font-family: var(--serif);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+  }
+
+  .cv-text p {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    max-width: 48ch;
+  }
+
+  .cv-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    white-space: nowrap;
+  }
+
+  .cv-btn:hover { background: #a3c49e; transform: translateY(-1px); }
+
+  .cv-btn-ghost {
+    background: none;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    margin-left: 1rem;
+  }
+
+  .cv-btn-ghost:hover { background: var(--accent-glow); transform: translateY(-1px); }
+
+  /* ── CONTACT ── */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .contact-intro {
+    font-size: 1.0625rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.75;
+    max-width: 44ch;
+  }
+
+  .contact-links { display: flex; flex-direction: column; gap: 0; }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border-dim);
+    text-decoration: none;
+    transition: padding-left 0.2s;
+  }
+
+  .contact-link:hover { padding-left: 0.5rem; }
+
+  .contact-link-label {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .contact-link-value {
+    font-family: var(--body);
+    font-size: 0.9375rem;
+    color: var(--text);
+    font-weight: 300;
+  }
+
+  .contact-link:hover .contact-link-value { color: var(--accent); }
+
+  .arrow { color: var(--text-dim); font-size: 0.8rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border-dim);
+    padding: 2rem clamp(1.5rem, 5vw, 4rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-copy {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .footer-nav { display: flex; gap: 2rem; }
+
+  .footer-nav a {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-nav a:hover { color: var(--accent); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+    .exp-item::before { display: none; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; }
+    .gallery-item.wide { grid-column: span 2; }
+    #cv-section .inner { flex-direction: column; }
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+</style>
+</head>
+<body>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lb-close">✕</button>
+  <button class="lightbox-nav lightbox-prev" id="lb-prev">‹</button>
+  <img src="" alt="" id="lb-img">
+  <button class="lightbox-nav lightbox-next" id="lb-next">›</button>
+  <p class="lightbox-caption" id="lb-caption"></p>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">H. Huizar Contreras</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#publications">Publications</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<header id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-tag">Marine Field Biologist · Mexico City</div>
+  <h1 class="hero-name">Heber<br><em>Huizar</em><br>Contreras</h1>
+  <p class="hero-subtitle">Protected Species Observer and PAM Operator with over a decade of offshore experience across all geophysical survey tiers. NMFS unconditional approval for Tiers 1–3.</p>
+  <div class="hero-meta">
+    <span class="tag">PSO · Tier 1–3</span>
+    <span class="tag">PAM Operator</span>
+    <span class="tag">NMFS Approved</span>
+    <span class="hero-stat"><span>2,000+</span> offshore days</span>
+    <span class="hero-stat"><span>M.A.I.A.</span> — COLEF</span>
+  </div>
+</header>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">Profile</div>
+  <h2 class="section-title">Biologist &amp; Environmental<br>Management Specialist</h2>
+  <div class="about-grid">
+    <div class="about-body reveal">
+      <p>I work at the intersection of marine mammal protection, geophysical survey operations, and environmental compliance. My offshore career spans Tiers 1 through 3 under NMFS guidelines, with real-time mitigation responsibilities across seismic, AUV, and multibeam survey programs.</p>
+      <p>In parallel, I hold a Master's in International Environmental Management from El Colegio de la Frontera Norte (COLEF), where my research centered on urban ecology, environmental justice, and GIS-based spatial analysis of public green infrastructure.</p>
+      <p>I work as an independent contractor, bridging operational field expertise with peer-reviewed academic output. My approach to both roles is the same: methodical, skeptical of assumptions, and oriented toward documentation and evidence.</p>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <div class="about-stats">
+        <div class="stat-cell">
+          <span class="stat-number">2,000+</span>
+          <span class="stat-label">Offshore Days</span>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-number">10+</span>
+          <span class="stat-label">Years in Field</span>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-number">3</span>
+          <span class="stat-label">NMFS Survey Tiers</span>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-number">4+</span>
+          <span class="stat-label">Peer-reviewed Works</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">Professional Record</div>
+  <h2 class="section-title">Field &amp; Research Experience</h2>
+
+  <div class="experience-list">
+
+    <div class="exp-item reveal">
+      <div class="exp-period">2014 — present</div>
+      <div>
+        <div class="exp-title">Protected Species Observer / PAM Operator</div>
+        <div class="exp-org">Multiple operators — Gulf of Mexico, Atlantic, Pacific, West Africa</div>
+        <p class="exp-body">Real-time cetacean and sea turtle observation during active geophysical surveys. PAM deployment, monitoring and reporting using PAMguard, Resonance, QuietSea, and Spectrogram. Tier 1–3 operations under NMFS unconditional approval. Responsible for shutdown protocols, soft-start management, and daily marine mammal sighting reports for BOEM and BSEE compliance.</p>
+        <div class="exp-tags">
+          <span class="exp-tag">NMFS Tier 1–3</span>
+          <span class="exp-tag">PAMguard</span>
+          <span class="exp-tag">Resonance</span>
+          <span class="exp-tag">QuietSea</span>
+          <span class="exp-tag">BOEM / BSEE</span>
+          <span class="exp-tag">BiOp Compliance</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item reveal reveal-delay-1">
+      <div class="exp-period">2020 — 2022</div>
+      <div>
+        <div class="exp-title">Environmental Researcher</div>
+        <div class="exp-org">El Colegio de la Frontera Norte (COLEF)</div>
+        <p class="exp-body">Graduate research on urban park distribution and environmental justice in Mexico City. GIS spatial analysis linking green infrastructure access to socioeconomic indicators. Co-authored peer-reviewed book chapters on urban ecology and applied social science methodology.</p>
+        <div class="exp-tags">
+          <span class="exp-tag">GIS / QGIS</span>
+          <span class="exp-tag">Urban Ecology</span>
+          <span class="exp-tag">Environmental Justice</span>
+          <span class="exp-tag">Applied Social Science</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item reveal reveal-delay-2">
+      <div class="exp-period">2013 — 2014</div>
+      <div>
+        <div class="exp-title">Marine Mammal Observer — Trainee</div>
+        <div class="exp-org">Offshore operations — Gulf of Mexico</div>
+        <p class="exp-body">Initial field rotations under senior PSO supervision during 2D and 3D seismic programs. Built foundational species identification, watchkeeping protocols, and passive acoustic fundamentals that preceded full NMFS unconditional approval.</p>
+        <div class="exp-tags">
+          <span class="exp-tag">Species ID</span>
+          <span class="exp-tag">Seismic Operations</span>
+          <span class="exp-tag">Watchkeeping</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-label">Academic Background</div>
+  <h2 class="section-title">Education</h2>
+  <div class="edu-grid">
+    <div class="edu-card reveal">
+      <div class="edu-degree">M.A. in International Environmental Management<br><em style="font-style:italic; color: var(--text-muted); font-size:0.9em;">(M.A.I.A.)</em></div>
+      <div class="edu-institution">El Colegio de la Frontera Norte — COLEF</div>
+      <div class="edu-year">Graduated 2022 · Tijuana, Mexico</div>
+    </div>
+    <div class="edu-card reveal reveal-delay-1">
+      <div class="edu-degree">Bachelor's in Biology</div>
+      <div class="edu-institution">Universidad Nacional — Mexico</div>
+      <div class="edu-year">Mexico City</div>
+    </div>
+    <div class="edu-card reveal reveal-delay-2">
+      <div class="edu-degree">NMFS PSO Unconditional Approval</div>
+      <div class="edu-institution">National Marine Fisheries Service</div>
+      <div class="edu-year">Tiers 1, 2, 3 — All geophysical survey categories</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PUBLICATIONS -->
+<section id="publications">
+  <div class="section-label">Research Output</div>
+  <h2 class="section-title">Publications</h2>
+  <div class="pub-list">
+
+    <div class="pub-item reveal">
+      <div class="pub-year-box">2022</div>
+      <div>
+        <p class="pub-title">Urban Green Infrastructure and Environmental Justice: A Spatial Analysis of Park Distribution in Mexico City</p>
+        <p class="pub-source">Peer-reviewed book chapter · COLEF academic series</p>
+      </div>
+    </div>
+
+    <div class="pub-item reveal reveal-delay-1">
+      <div class="pub-year-box">2022</div>
+      <div>
+        <p class="pub-title">Applied Social Science Methods in Urban Ecology Research</p>
+        <p class="pub-source">Peer-reviewed book chapter · COLEF academic series</p>
+      </div>
+    </div>
+
+    <div class="pub-item reveal reveal-delay-2">
+      <div class="pub-year-box">–</div>
+      <div>
+        <p class="pub-title">Additional applied research reports and technical documents available upon request</p>
+        <p class="pub-source">Environmental management · Offshore mitigation compliance</p>
+      </div>
+    </div>
+
+  </div>
+  <p style="margin-top:1.5rem; font-family: var(--mono); font-size:0.68rem; color:var(--text-dim); letter-spacing:0.06em;">
+    ↳ Update publication titles and details directly in the HTML source.
+  </p>
+</section>
+
+<div class="divider"></div>
+
+<!-- GALLERY -->
+<div id="gallery">
+  <div class="inner">
+    <div class="section-label">Visual Record</div>
+    <h2 class="section-title">Field Photography</h2>
+    <p style="color:var(--text-muted); font-size:0.9375rem; font-weight:300; margin-bottom:2.5rem; max-width:52ch;">
+      Cetaceans, seabirds, and marine environments documented across survey programs. Captured with Sony Alpha a7 III + Sigma 60–600mm.
+    </p>
+
+    <!-- Replace src="" with your actual image paths. Add or remove .gallery-item divs freely. -->
+    <!-- Use class="wide" for 2-column-span images, class="tall" for portrait ratio. -->
+    <div class="gallery-grid" id="gallery-grid">
+
+      <div class="gallery-item wide" data-src="photos/01.jpg" data-caption="Gulf of Mexico — 2023">
+        <div class="placeholder"><span class="placeholder-icon">⬜</span><span class="placeholder-text">Replace with photo</span></div>
+        <div class="overlay"><span class="overlay-caption">Gulf of Mexico — 2023</span></div>
+      </div>
+
+      <div class="gallery-item" data-src="photos/02.jpg" data-caption="Cetacean observation — offshore">
+        <div class="placeholder"><span class="placeholder-icon">⬜</span><span class="placeholder-text">Replace with photo</span></div>
+        <div class="overlay"><span class="overlay-caption">Cetacean observation</span></div>
+      </div>
+
+      <div class="gallery-item" data-src="photos/03.jpg" data-caption="Humpback whale — Atlantic">
+        <div class="placeholder"><span class="placeholder-icon">⬜</span><span class="placeholder-text">Replace with photo</span></div>
+        <div class="overlay"><span class="overlay-caption">Humpback — Atlantic</span></div>
+      </div>
+
+      <div class="gallery-item tall" data-src="photos/04.jpg" data-caption="Sperm whale — survey watch">
+        <div class="placeholder"><span class="placeholder-icon">⬜</span><span class="placeholder-text">Replace with photo</span></div>
+        <div class="overlay"><span class="overlay-caption">Sperm whale</span></div>
+      </div>
+
+      <div class="gallery-item" data-src="photos/05.jpg" data-caption="Bottlenose dolphin bow-riding">
+        <div class="placeholder"><span class="placeholder-icon">⬜</span><span class="placeholder-text">Replace with photo</span></div>
+        <div class="overlay"><span class="overlay-caption">Bottlenose — bow-riding</span></div>
+      </div>
+
+      <div class="gallery-item" data-src="photos/06.jpg" data-caption="Survey vessel — dusk watch">
+        <div class="placeholder"><span class="placeholder-icon">⬜</span><span class="placeholder-text">Replace with photo</span></div>
+        <div class="overlay"><span class="overlay-caption">Dusk watch</span></div>
+      </div>
+
+      <div class="gallery-item wide" data-src="photos/07.jpg" data-caption="Blue whale — Pacific survey">
+        <div class="placeholder"><span class="placeholder-icon">⬜</span><span class="placeholder-text">Replace with photo</span></div>
+        <div class="overlay"><span class="overlay-caption">Blue whale — Pacific</span></div>
+      </div>
+
+      <div class="gallery-item" data-src="photos/08.jpg" data-caption="Seabird documentation">
+        <div class="placeholder"><span class="placeholder-icon">⬜</span><span class="placeholder-text">Replace with photo</span></div>
+        <div class="overlay"><span class="overlay-caption">Seabird documentation</span></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CV DOWNLOAD -->
+<div id="cv-section">
+  <div class="inner">
+    <div class="cv-text">
+      <div class="section-label">Curriculum Vitae</div>
+      <h2>Full professional record,<br>available for download.</h2>
+      <p>Integrated CV covering offshore field operations, NMFS approvals, academic credentials, and full publication record. Updated for current contract cycles.</p>
+    </div>
+    <div>
+      <!-- Replace href="#" with the actual path to your CV PDF, e.g. "files/Huizar_Contreras_CV.pdf" -->
+      <a href="files/Huizar_Contreras_CV.pdf" class="cv-btn" download>
+        ↓ Download CV (PDF)
+      </a>
+      <!-- Optional: link to a version hosted somewhere else -->
+      <!--
+      <a href="#" class="cv-btn cv-btn-ghost" target="_blank">
+        View Online
+      </a>
+      -->
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">Get in Touch</div>
+  <h2 class="section-title">Contact</h2>
+  <div class="contact-grid">
+    <p class="contact-intro reveal">
+      Available for PSO and PAM operator roles across geophysical survey programs. Based in Mexico City; rotational offshore scheduling. Responding to recruiters and project managers directly.
+    </p>
+    <div class="contact-links reveal reveal-delay-1">
+      <!-- Replace placeholders with your actual contact details -->
+      <a href="mailto:your@email.com" class="contact-link">
+        <div>
+          <div class="contact-link-label">Email</div>
+          <div class="contact-link-value">your@email.com</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://linkedin.com/in/yourprofile" class="contact-link" target="_blank" rel="noopener">
+        <div>
+          <div class="contact-link-label">LinkedIn</div>
+          <div class="contact-link-value">linkedin.com/in/yourprofile</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://orcid.org/your-orcid" class="contact-link" target="_blank" rel="noopener">
+        <div>
+          <div class="contact-link-label">ORCID</div>
+          <div class="contact-link-value">orcid.org/your-orcid</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <div class="contact-link" style="cursor:default;">
+        <div>
+          <div class="contact-link-label">Location</div>
+          <div class="contact-link-value">Mexico City, Mexico</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-copy">© 2025 Heber Huizar Contreras</span>
+  <nav class="footer-nav">
+    <a href="#hero">Top</a>
+    <a href="#gallery">Gallery</a>
+    <a href="files/Huizar_Contreras_CV.pdf" download>CV</a>
+  </nav>
+</footer>
+
+<script>
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }});
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => observer.observe(el));
+
+  // Gallery lightbox
+  const items = document.querySelectorAll('.gallery-item[data-src]');
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  const lbCaption = document.getElementById('lb-caption');
+  let current = 0;
+
+  function openLightbox(i) {
+    current = i;
+    const item = items[i];
+    const src = item.dataset.src;
+    lbImg.src = src;
+    lbImg.alt = item.dataset.caption || '';
+    lbCaption.textContent = item.dataset.caption || '';
+    lb.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lb.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  items.forEach((item, i) => {
+    item.addEventListener('click', () => openLightbox(i));
+  });
+
+  document.getElementById('lb-close').addEventListener('click', closeLightbox);
+  lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+
+  document.getElementById('lb-prev').addEventListener('click', (e) => {
+    e.stopPropagation();
+    openLightbox((current - 1 + items.length) % items.length);
+  });
+
+  document.getElementById('lb-next').addEventListener('click', (e) => {
+    e.stopPropagation();
+    openLightbox((current + 1) % items.length);
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') openLightbox((current - 1 + items.length) % items.length);
+    if (e.key === 'ArrowRight') openLightbox((current + 1) % items.length);
+  });
+
+  // Smooth nav highlight (optional active state)
+  const sections = document.querySelectorAll('section[id], header[id], div[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 100) cur = sec.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--accent)' : '';
+    });
+  });
+</script>
+</body>
+</html>
