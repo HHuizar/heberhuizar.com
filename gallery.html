@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Prints — Heber Huizar Contreras</title>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ── GALLERY HERO ── */
+#gallery-hero {
+  min-height: 55vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: calc(var(--nav-h) + 5rem) clamp(1.5rem, 6vw, 5rem) 5rem;
+  position: relative; overflow: hidden;
+  background: var(--deep);
+}
+.ghero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 80%, rgba(30,120,165,0.3) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 20%, rgba(232,109,70,0.18) 0%, transparent 60%),
+    linear-gradient(160deg, #0c2b3f 0%, #0f3e5c 50%, #0c2b3f 100%);
+}
+.ghero-content { position: relative; z-index: 1; max-width: var(--max-w); margin: 0 auto; width: 100%; }
+.ghero-eyebrow {
+  display: inline-flex; align-items: center; gap: 0.75rem;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--peach); margin-bottom: 1.25rem;
+}
+.ghero-eyebrow::before { content: ''; width: 28px; height: 2px; background: var(--peach); border-radius: 2px; }
+.ghero-title {
+  font-family: var(--serif);
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 400; line-height: 1.0; color: #fff;
+  letter-spacing: -0.02em; margin-bottom: 1rem;
+}
+.ghero-title em { font-style: italic; color: var(--horizon); }
+.ghero-sub {
+  font-size: 1.0625rem; font-weight: 300; color: var(--cloud);
+  max-width: 56ch; line-height: 1.75; margin-bottom: 2rem;
+}
+
+/* ── SHOP AREA ── */
+#shop {
+  background: var(--deep);
+  position: relative; overflow: hidden;
+}
+#shop::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 90%, rgba(30,120,165,0.2) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 80% 10%, rgba(232,109,70,0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+.shop-inner {
+  max-width: var(--max-w); margin: 0 auto;
+  padding: 5rem clamp(1.5rem, 5vw, 4rem) 7rem;
+  position: relative; z-index: 1;
+}
+
+/* Filters */
+.shop-filters {
+  display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 3.5rem;
+}
+.filter-btn {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.45em 1.2em; border-radius: 99px;
+  border: 1.5px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.55); background: transparent;
+  cursor: pointer; transition: all 0.2s;
+}
+.filter-btn:hover,
+.filter-btn.active { border-color: var(--peach); color: var(--peach); background: rgba(242,157,116,0.1); }
+
+/* Grid */
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+}
+
+/* Photo card */
+.photo-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 10px; overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer; position: relative;
+}
+.photo-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.45); border-color: rgba(255,255,255,0.18); }
+.photo-card.featured { grid-column: span 2; }
+
+.photo-img { width: 100%; position: relative; overflow: hidden; background: var(--ocean); }
+.photo-card:not(.featured) .photo-img { aspect-ratio: 4/3; }
+.photo-card.featured .photo-img { aspect-ratio: 16/7; }
+.photo-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); }
+.photo-card:hover .photo-img img { transform: scale(1.05); }
+
+/* Gradient placeholders */
+.photo-img .ph { width: 100%; height: 100%; position: absolute; inset: 0; }
+
+.photo-badge {
+  position: absolute; top: 12px; left: 12px;
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.3em 0.85em; border-radius: 99px; z-index: 2;
+}
+.badge-new { background: var(--coral); color: #fff; }
+.badge-best { background: var(--golden); color: var(--ink); }
+
+.photo-quick {
+  position: absolute; top: 12px; right: 12px;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,0.12); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.22);
+  color: #fff; font-size: 0.9rem;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.2s, background 0.2s;
+  cursor: pointer; z-index: 2;
+}
+.photo-card:hover .photo-quick { opacity: 1; }
+.photo-quick:hover { background: rgba(255,255,255,0.28); }
+
+.photo-info { padding: 1.35rem 1.35rem 1.5rem; }
+.photo-title { font-family: var(--serif); font-size: 1.15rem; font-weight: 600; color: #fff; line-height: 1.3; margin-bottom: 0.3rem; }
+.photo-location {
+  font-size: 0.72rem; font-weight: 400; color: var(--cloud);
+  letter-spacing: 0.05em; margin-bottom: 1.1rem;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.photo-location::before { content: '◎'; font-size: 0.6rem; color: var(--horizon); }
+.photo-footer { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.photo-price { font-family: var(--serif); font-size: 1.6rem; font-weight: 400; color: var(--golden); line-height: 1; }
+.photo-price small { font-family: var(--sans); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--silver); display: block; margin-bottom: 2px; }
+.photo-sizes { display: flex; gap: 0.4rem; margin-bottom: 0.75rem; }
+.size-opt {
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--cloud); border: 1px solid rgba(255,255,255,0.18);
+  padding: 0.25em 0.65em; border-radius: 3px; cursor: pointer; transition: all 0.15s;
+}
+.size-opt:hover, .size-opt.selected { border-color: var(--peach); color: var(--peach); }
+
+.btn-add {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.65em 1.4em; border-radius: var(--r);
+  background: var(--coral); color: #fff; border: none;
+  cursor: pointer; transition: background 0.2s, transform 0.15s; white-space: nowrap;
+}
+.btn-add:hover { background: #c8562f; transform: translateY(-1px); }
+.btn-add.added { background: #2a7a52; }
+
+/* Purchasing info note */
+.shop-note {
+  margin-top: 3.5rem;
+  padding: 1.75rem 2rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-left: 3px solid var(--peach);
+  border-radius: var(--r);
+  font-size: 0.875rem; color: var(--cloud); font-weight: 300; line-height: 1.75;
+}
+.shop-note strong { color: var(--peach); font-weight: 600; }
+
+/* ── PROCESS SECTION ── */
+#process { background: var(--foam); }
+.process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; background: var(--mist); border: 1px solid var(--mist); border-radius: var(--r); overflow: hidden; }
+.process-step { background: var(--pearl); padding: 2rem 1.5rem; }
+.process-num { font-family: var(--serif); font-size: 2.5rem; font-weight: 300; color: var(--horizon); line-height: 1; margin-bottom: 0.75rem; }
+.process-title { font-size: 0.88rem; font-weight: 700; color: var(--deep); margin-bottom: 0.5rem; }
+.process-desc { font-size: 0.85rem; color: var(--ink-lt); font-weight: 300; line-height: 1.65; }
+
+@media (max-width: 900px) {
+  .shop-grid { grid-template-columns: 1fr 1fr; }
+  .photo-card.featured { grid-column: span 2; }
+  .process-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .shop-grid { grid-template-columns: 1fr; }
+  .photo-card.featured { grid-column: span 1; }
+  .process-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lb-close">✕</button>
+  <button class="lb-nav lb-prev" id="lb-prev">‹</button>
+  <img src="" alt="" id="lb-img">
+  <button class="lb-nav lb-next" id="lb-next">›</button>
+  <p class="lightbox-caption" id="lb-caption"></p>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    Heber Huizar Contreras
+    <span>Marine Biologist · PSO · PAM Operator</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="gallery.html" class="active nav-shop-btn">Shop Prints</a></li>
+  </ul>
+</nav>
+
+<!-- GALLERY HERO -->
+<header id="gallery-hero">
+  <div class="ghero-bg"></div>
+  <div class="ghero-content">
+    <p class="ghero-eyebrow">Fine Art Photography</p>
+    <h1 class="ghero-title">Ocean<br><em>Prints</em></h1>
+    <p class="ghero-sub">Cetaceans, seabirds, and open water environments captured from survey vessels across the Gulf of Mexico, Atlantic, and West Africa. Archival-quality fine art prints.</p>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+      <span style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;border:1.5px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.7);padding:0.35em 1em;border-radius:99px;">Sony α7 III</span>
+      <span style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;border:1.5px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.7);padding:0.35em 1em;border-radius:99px;">Sigma 60–600mm</span>
+      <span style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;border:1.5px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.7);padding:0.35em 1em;border-radius:99px;">Archival Print</span>
+      <span style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;border:1.5px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.7);padding:0.35em 1em;border-radius:99px;">Worldwide Shipping</span>
+    </div>
+  </div>
+</header>
+
+<!-- SHOP -->
+<div id="shop">
+  <div class="shop-inner">
+
+    <!-- Filters -->
+    <div class="shop-filters">
+      <button class="filter-btn active" onclick="filterPhotos('all', this)">All</button>
+      <button class="filter-btn" onclick="filterPhotos('cetacean', this)">Cetaceans</button>
+      <button class="filter-btn" onclick="filterPhotos('seabird', this)">Seabirds</button>
+      <button class="filter-btn" onclick="filterPhotos('seascape', this)">Seascapes</button>
+      <button class="filter-btn" onclick="filterPhotos('offshore', this)">Offshore Life</button>
+    </div>
+
+    <!-- Grid -->
+    <!-- Each card: set data-src to your image path, adjust data-cat for filter, update title/price/location -->
+    <!-- For real images: add <img src="photos/XX.jpg" alt="..."> inside .photo-img; remove .ph div -->
+    <div class="shop-grid">
+
+      <div class="photo-card featured reveal" data-cat="cetacean" data-src="photos/01.jpg" data-caption="Humpback whale fluke — Gulf of Mexico, 2023">
+        <div class="photo-img">
+          <div class="ph" style="background:linear-gradient(135deg,#0c2b3f 0%,#1b78a5 50%,#3aa0cc 100%);"></div>
+          <!-- <img src="photos/01.jpg" alt="Humpback whale fluke"> -->
+        </div>
+        <span class="photo-badge badge-best">Bestseller</span>
+        <button class="photo-quick" title="Quick view">⤢</button>
+        <div class="photo-info">
+          <p class="photo-title">Humpback Fluke at Dusk</p>
+          <p class="photo-location">Gulf of Mexico · 2023</p>
+          <div class="photo-footer">
+            <div>
+              <div class="photo-sizes">
+                <button class="size-opt selected">8×10</button>
+                <button class="size-opt">12×16</button>
+                <button class="size-opt">18×24</button>
+                <button class="size-opt">24×36</button>
+              </div>
+              <div class="photo-price"><small>from</small>$85</div>
+            </div>
+            <button class="btn-add">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-card reveal reveal-delay-1" data-cat="cetacean" data-src="photos/02.jpg" data-caption="Sperm whale — Atlantic survey, 2022">
+        <div class="photo-img">
+          <div class="ph" style="background:linear-gradient(135deg,#274258 0%,#13527a 60%,#3aa0cc 100%);"></div>
+        </div>
+        <span class="photo-badge badge-new">New</span>
+        <button class="photo-quick" title="Quick view">⤢</button>
+        <div class="photo-info">
+          <p class="photo-title">Sperm Whale Logging</p>
+          <p class="photo-location">Atlantic · 2022</p>
+          <div class="photo-footer">
+            <div>
+              <div class="photo-sizes">
+                <button class="size-opt selected">8×10</button>
+                <button class="size-opt">12×16</button>
+                <button class="size-opt">18×24</button>
+              </div>
+              <div class="photo-price"><small>from</small>$75</div>
+            </div>
+            <button class="btn-add">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-card reveal reveal-delay-2" data-cat="seascape" data-src="photos/03.jpg" data-caption="Sunset watch — offshore survey vessel">
+        <div class="photo-img">
+          <div class="ph" style="background:linear-gradient(135deg,#c06038 0%,#f0bc50 50%,#e86d46 100%);"></div>
+        </div>
+        <button class="photo-quick" title="Quick view">⤢</button>
+        <div class="photo-info">
+          <p class="photo-title">Golden Hour Watch</p>
+          <p class="photo-location">Gulf of Mexico · 2021</p>
+          <div class="photo-footer">
+            <div>
+              <div class="photo-sizes">
+                <button class="size-opt selected">8×10</button>
+                <button class="size-opt">12×16</button>
+                <button class="size-opt">18×24</button>
+              </div>
+              <div class="photo-price"><small>from</small>$70</div>
+            </div>
+            <button class="btn-add">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-card reveal" data-cat="cetacean" data-src="photos/04.jpg" data-caption="Bottlenose dolphins bow-riding — Pacific">
+        <div class="photo-img">
+          <div class="ph" style="background:linear-gradient(135deg,#1b78a5 0%,#78c3de 100%);"></div>
+        </div>
+        <button class="photo-quick" title="Quick view">⤢</button>
+        <div class="photo-info">
+          <p class="photo-title">Bow-riding Dolphins</p>
+          <p class="photo-location">Pacific · 2022</p>
+          <div class="photo-footer">
+            <div>
+              <div class="photo-sizes">
+                <button class="size-opt selected">8×10</button>
+                <button class="size-opt">12×16</button>
+                <button class="size-opt">18×24</button>
+              </div>
+              <div class="photo-price"><small>from</small>$65</div>
+            </div>
+            <button class="btn-add">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-card reveal reveal-delay-1" data-cat="seabird" data-src="photos/05.jpg" data-caption="Masked booby — Atlantic, 2021">
+        <div class="photo-img">
+          <div class="ph" style="background:linear-gradient(135deg,#3aa0cc 0%,#78c3de 50%,#c5dae8 100%);"></div>
+        </div>
+        <button class="photo-quick" title="Quick view">⤢</button>
+        <div class="photo-info">
+          <p class="photo-title">Masked Booby in Flight</p>
+          <p class="photo-location">Atlantic · 2021</p>
+          <div class="photo-footer">
+            <div>
+              <div class="photo-sizes">
+                <button class="size-opt selected">8×10</button>
+                <button class="size-opt">12×16</button>
+                <button class="size-opt">18×24</button>
+              </div>
+              <div class="photo-price"><small>from</small>$65</div>
+            </div>
+            <button class="btn-add">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-card reveal reveal-delay-2" data-cat="seascape" data-src="photos/06.jpg" data-caption="Storm front approaching — Gulf of Mexico">
+        <div class="photo-img">
+          <div class="ph" style="background:linear-gradient(135deg,#274258 0%,#4a6a82 50%,#78c3de 100%);"></div>
+        </div>
+        <button class="photo-quick" title="Quick view">⤢</button>
+        <div class="photo-info">
+          <p class="photo-title">Storm Front</p>
+          <p class="photo-location">Gulf of Mexico · 2020</p>
+          <div class="photo-footer">
+            <div>
+              <div class="photo-sizes">
+                <button class="size-opt selected">8×10</button>
+                <button class="size-opt">12×16</button>
+                <button class="size-opt">18×24</button>
+              </div>
+              <div class="photo-price"><small>from</small>$70</div>
+            </div>
+            <button class="btn-add">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-card featured reveal" data-cat="cetacean" data-src="photos/07.jpg" data-caption="Blue whale surfacing — Pacific survey, 2023">
+        <div class="photo-img">
+          <div class="ph" style="background:linear-gradient(135deg,#0c2b3f 0%,#13527a 40%,#1b78a5 70%,#3aa0cc 100%);"></div>
+        </div>
+        <span class="photo-badge badge-best">Top Pick</span>
+        <button class="photo-quick" title="Quick view">⤢</button>
+        <div class="photo-info">
+          <p class="photo-title">Blue Whale Surfacing</p>
+          <p class="photo-location">Pacific · 2023</p>
+          <div class="photo-footer">
+            <div>
+              <div class="photo-sizes">
+                <button class="size-opt selected">12×16</button>
+                <button class="size-opt">18×24</button>
+                <button class="size-opt">24×36</button>
+              </div>
+              <div class="photo-price"><small>from</small>$110</div>
+            </div>
+            <button class="btn-add">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-card reveal" data-cat="offshore" data-src="photos/08.jpg" data-caption="PAM hydrophone deployment — survey vessel">
+        <div class="photo-img">
+          <div class="ph" style="background:linear-gradient(135deg,#0c2b3f 0%,#274258 60%,#4a6a82 100%);"></div>
+        </div>
+        <button class="photo-quick" title="Quick view">⤢</button>
+        <div class="photo-info">
+          <p class="photo-title">Hydrophone Deployment</p>
+          <p class="photo-location">Gulf of Mexico · 2022</p>
+          <div class="photo-footer">
+            <div>
+              <div class="photo-sizes">
+                <button class="size-opt selected">8×10</button>
+                <button class="size-opt">12×16</button>
+              </div>
+              <div class="photo-price"><small>from</small>$60</div>
+            </div>
+            <button class="btn-add">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-card reveal reveal-delay-1" data-cat="offshore" data-src="photos/09.jpg" data-caption="Milky Way over the survey vessel — Gulf of Mexico">
+        <div class="photo-img">
+          <div class="ph" style="background:linear-gradient(135deg,#0c1e2d 0%,#1b3a5c 50%,#274258 100%);"></div>
+        </div>
+        <span class="photo-badge badge-new">New</span>
+        <button class="photo-quick" title="Quick view">⤢</button>
+        <div class="photo-info">
+          <p class="photo-title">Night Watch</p>
+          <p class="photo-location">Gulf of Mexico · 2023</p>
+          <div class="photo-footer">
+            <div>
+              <div class="photo-sizes">
+                <button class="size-opt selected">12×16</button>
+                <button class="size-opt">18×24</button>
+                <button class="size-opt">24×36</button>
+              </div>
+              <div class="photo-price"><small>from</small>$90</div>
+            </div>
+            <button class="btn-add">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="shop-note">
+      <strong>Custom orders &amp; licensing:</strong> All prints are archival-quality Giclée on 100% cotton rag paper. Custom sizes, canvas, and metal prints available on request. Commercial licensing for editorial and scientific use also available. Contact directly at <strong>your@email.com</strong>.
+    </div>
+  </div>
+</div>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="section-wrap">
+    <p class="section-eyebrow">How it works</p>
+    <h2 class="section-title">From ocean to<br><em>your wall</em></h2>
+    <div class="process-grid">
+      <div class="process-step reveal">
+        <div class="process-num">01</div>
+        <div class="process-title">Choose &amp; size</div>
+        <p class="process-desc">Select your image and format. Standard sizes ship within 7–10 days. Custom sizes on request.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-1">
+        <div class="process-num">02</div>
+        <div class="process-title">Order &amp; pay</div>
+        <p class="process-desc">Secure checkout via PayPal or bank transfer. Full payment upfront for standard prints.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-2">
+        <div class="process-num">03</div>
+        <div class="process-title">Printed &amp; packed</div>
+        <p class="process-desc">Archival Giclée on cotton rag. Shipped flat in rigid packaging with tracking.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-3">
+        <div class="process-num">04</div>
+        <div class="process-title">Worldwide delivery</div>
+        <p class="process-desc">Ships from Mexico City. International delivery 10–21 business days depending on destination.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Heber Huizar Contreras</div>
+  <nav class="footer-nav">
+    <a href="index.html">Home</a>
+    <a href="gallery.html">Shop Prints</a>
+    <a href="about.html">About</a>
+    <a href="about.html#contact">Contact</a>
+    <a href="files/Huizar_Contreras_CV.pdf" download>Download CV</a>
+  </nav>
+  <span class="footer-copy">© 2025 Heber Huizar Contreras · Mexico City</span>
+</footer>
+
+<script>
+const revealEls = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+}, { threshold: 0.08 });
+revealEls.forEach(el => obs.observe(el));
+
+// Size selection
+document.querySelectorAll('.photo-sizes').forEach(container => {
+  container.querySelectorAll('.size-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      container.querySelectorAll('.size-opt').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+  });
+});
+
+// Add to cart feedback
+document.querySelectorAll('.btn-add').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    const orig = btn.textContent;
+    btn.textContent = '✓ Added';
+    btn.classList.add('added');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('added'); }, 1800);
+  });
+});
+
+// Filter
+function filterPhotos(cat, clickedBtn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  clickedBtn.classList.add('active');
+  document.querySelectorAll('.photo-card').forEach(card => {
+    card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+  });
+}
+
+// Lightbox
+const cards = document.querySelectorAll('.photo-card[data-src]');
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lb-img');
+const lbCap = document.getElementById('lb-caption');
+let cur = 0;
+
+const visible = () => [...cards].filter(c => c.style.display !== 'none');
+
+function openLb(i) {
+  cur = i;
+  const v = visible();
+  lbImg.src = v[i].dataset.src;
+  lbCap.textContent = v[i].dataset.caption || '';
+  lb.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeLb() { lb.classList.remove('active'); document.body.style.overflow = ''; }
+
+document.querySelectorAll('.photo-quick').forEach((btn, i) => {
+  btn.addEventListener('click', e => { e.stopPropagation(); openLb(i); });
+});
+cards.forEach((c, i) => {
+  c.addEventListener('click', e => {
+    if (!e.target.closest('.btn-add') && !e.target.closest('.size-opt') && !e.target.closest('.photo-quick')) openLb(i);
+  });
+});
+
+document.getElementById('lb-close').addEventListener('click', closeLb);
+lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+document.getElementById('lb-prev').addEventListener('click', e => { e.stopPropagation(); const v = visible(); openLb((cur - 1 + v.length) % v.length); });
+document.getElementById('lb-next').addEventListener('click', e => { e.stopPropagation(); const v = visible(); openLb((cur + 1) % v.length); });
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('active')) return;
+  if (e.key === 'Escape') closeLb();
+  const v = visible();
+  if (e.key === 'ArrowLeft') openLb((cur - 1 + v.length) % v.length);
+  if (e.key === 'ArrowRight') openLb((cur + 1) % v.length);
+});
+</script>
+</body>
+</html>

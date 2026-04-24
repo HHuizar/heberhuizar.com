@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Heber Huizar Contreras</title>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ── ABOUT HERO ── */
+#about-hero {
+  min-height: 60vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: calc(var(--nav-h) + 5rem) clamp(1.5rem, 6vw, 5rem) 5rem;
+  position: relative; overflow: hidden;
+  background: var(--pearl);
+}
+.ahero-bg {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, rgba(237,243,249,0.4) 0%, rgba(237,243,249,0.0) 50%, rgba(237,243,249,0.8) 100%),
+    linear-gradient(135deg, #d8e8f2 0%, #edf3f9 40%, #c5dae8 80%, #d8e8f2 100%);
+}
+.ahero-content { position: relative; z-index: 1; max-width: var(--max-w); margin: 0 auto; width: 100%; }
+.ahero-eyebrow {
+  display: inline-flex; align-items: center; gap: 0.75rem;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--shallow); margin-bottom: 1.5rem;
+}
+.ahero-eyebrow::before { content: ''; width: 28px; height: 2px; background: var(--shallow); border-radius: 2px; }
+.ahero-title {
+  font-family: var(--serif);
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 400; line-height: 1.0; color: var(--deep);
+  letter-spacing: -0.025em; margin-bottom: 1rem;
+}
+.ahero-title em { font-style: italic; color: var(--ocean); }
+.ahero-sub { font-size: 1.0625rem; font-weight: 300; color: var(--ink-mid); max-width: 60ch; line-height: 1.75; }
+
+/* ── ABOUT BODY ── */
+#about-body { background: var(--foam); }
+.about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 6rem; align-items: start; }
+.about-text p { color: var(--ink-mid); font-size: 1.05rem; font-weight: 300; line-height: 1.85; margin-bottom: 1.35rem; }
+.about-text p:last-child { margin-bottom: 0; }
+
+.about-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.sidebar-card {
+  background: var(--pearl); border: 1px solid var(--mist);
+  border-radius: var(--r); padding: 1.5rem;
+}
+.sidebar-card-title {
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--shallow); margin-bottom: 1rem;
+}
+.skill-tag {
+  display: inline-block;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.05em;
+  border: 1px solid var(--mist); color: var(--ink-mid);
+  background: #fff; padding: 0.3em 0.85em; border-radius: 99px; margin: 0.2rem;
+}
+
+/* ── STATS BAR ── */
+#stats-bar { background: var(--ocean); }
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); }
+.stat-item { padding: 3rem 2rem; border-right: 1px solid rgba(255,255,255,0.12); text-align: center; }
+.stat-item:last-child { border-right: none; }
+.stat-n { font-family: var(--serif); font-size: 3.2rem; font-weight: 300; color: #fff; line-height: 1; display: block; margin-bottom: 0.5rem; }
+.stat-l { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+
+/* ── EXPERIENCE ── */
+#experience { background: var(--pearl); }
+.exp-list { display: flex; flex-direction: column; }
+.exp-item { display: grid; grid-template-columns: 180px 1fr; gap: 3rem; padding: 2.75rem 0; border-bottom: 1px solid var(--mist); }
+.exp-period { font-size: 0.78rem; font-weight: 600; color: var(--ink-dim); letter-spacing: 0.05em; padding-top: 0.25rem; }
+.exp-title { font-family: var(--serif); font-size: 1.35rem; font-weight: 600; color: var(--deep); margin-bottom: 0.2rem; line-height: 1.25; }
+.exp-org { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--shallow); margin-bottom: 0.85rem; }
+.exp-body { font-size: 0.9375rem; color: var(--ink-mid); font-weight: 300; line-height: 1.75; }
+.exp-tags { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 1rem; }
+.exp-tag { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-lt); border: 1px solid var(--mist); padding: 0.2em 0.75em; border-radius: 3px; }
+
+/* ── EDUCATION ── */
+#education { background: var(--foam); }
+.edu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--mist); border: 1px solid var(--mist); border-radius: var(--r); overflow: hidden; }
+.edu-card { background: var(--pearl); padding: 2.25rem 2rem; border-left: 3px solid var(--shallow); }
+.edu-degree { font-family: var(--serif); font-size: 1.1rem; font-weight: 600; color: var(--deep); margin-bottom: 0.5rem; line-height: 1.3; }
+.edu-institution { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--shallow); margin-bottom: 0.35rem; }
+.edu-year { font-size: 0.72rem; color: var(--ink-dim); letter-spacing: 0.05em; }
+
+/* ── PUBLICATIONS ── */
+#publications { background: var(--pearl); }
+.pub-list { display: flex; flex-direction: column; }
+.pub-item { display: grid; grid-template-columns: 60px 1fr; gap: 1.5rem; padding: 1.75rem 0; border-bottom: 1px solid var(--mist); align-items: start; }
+.pub-year {
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em;
+  color: var(--ocean); background: rgba(19,82,122,0.07);
+  border: 1px solid rgba(19,82,122,0.15);
+  padding: 0.35em 0; text-align: center; border-radius: 3px; margin-top: 0.2rem;
+}
+.pub-title { font-family: var(--serif); font-size: 1.0rem; font-weight: 600; color: var(--deep); margin-bottom: 0.3rem; line-height: 1.5; }
+.pub-source { font-size: 0.72rem; color: var(--ink-lt); letter-spacing: 0.04em; font-style: italic; }
+
+/* ── CV SECTION ── */
+#cv-section { background: var(--ocean); }
+.cv-inner { max-width: var(--max-w); margin: 0 auto; padding: 5.5rem clamp(1.5rem, 5vw, 4rem); display: flex; align-items: center; justify-content: space-between; gap: 3rem; flex-wrap: wrap; }
+.cv-text h2 { font-family: var(--serif); font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 400; color: #fff; margin-bottom: 0.75rem; line-height: 1.2; }
+.cv-text p { font-size: 0.9375rem; color: var(--cloud); font-weight: 300; max-width: 50ch; line-height: 1.7; }
+.cv-buttons { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+
+/* ── CONTACT ── */
+#contact { background: var(--foam); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+.contact-intro { font-size: 1.05rem; color: var(--ink-mid); font-weight: 300; line-height: 1.8; max-width: 44ch; }
+.contact-links { display: flex; flex-direction: column; }
+.contact-link {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.35rem 0; border-bottom: 1px solid var(--mist);
+  text-decoration: none; transition: padding-left 0.2s;
+}
+.contact-link:hover { padding-left: 0.5rem; }
+.contact-link-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim); margin-bottom: 0.15rem; }
+.contact-link-val { font-size: 0.9375rem; color: var(--ink); font-weight: 400; }
+.contact-link:hover .contact-link-val { color: var(--ocean); }
+.c-arrow { color: var(--ink-dim); font-size: 0.9rem; }
+
+@media (max-width: 900px) {
+  .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .stat-item:nth-child(2) { border-right: none; }
+  .exp-item { grid-template-columns: 1fr; gap: 0.4rem; }
+  .edu-grid { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .cv-inner { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    Heber Huizar Contreras
+    <span>Marine Biologist · PSO · PAM Operator</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="gallery.html" class="nav-shop-btn">Shop Prints</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<header id="about-hero">
+  <div class="ahero-bg"></div>
+  <div class="ahero-content">
+    <p class="ahero-eyebrow">Professional Profile</p>
+    <h1 class="ahero-title">Biologist &amp;<br><em>Observer</em></h1>
+    <p class="ahero-sub">A decade-plus career as a Protected Species Observer and PAM Operator in offshore marine environments, running in parallel with peer-reviewed academic research in urban ecology and environmental management.</p>
+  </div>
+</header>
+
+<!-- ABOUT -->
+<section id="about-body">
+  <div class="section-wrap">
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p class="section-eyebrow">About</p>
+        <h2 class="section-title">Two professional<br><em>identities.</em></h2>
+        <p>I work at the intersection of marine mammal protection, geophysical survey operations, and environmental compliance. My offshore career spans Tiers 1 through 3 under NMFS guidelines, with real-time mitigation responsibilities across seismic, AUV, and multibeam survey programs. Over 2,000 offshore days, across basins in the Gulf of Mexico, Atlantic, Pacific, and West Africa.</p>
+        <p>In parallel, I hold a Master's in International Environmental Management (M.A.I.A.) from El Colegio de la Frontera Norte (COLEF), where my thesis evaluated urban park distribution in Tijuana using GIS and an environmental justice framework. That research produced two peer-reviewed book chapters and a set of applied reports for the Observatorio Turístico de Baja California.</p>
+        <p>The field camera follows me on both tracks. Years of watching the ocean from a survey vessel — where patience and precision are the only instruments that matter — carry directly into wildlife photography.</p>
+      </div>
+      <div class="about-sidebar reveal reveal-delay-1">
+        <div class="sidebar-card">
+          <p class="sidebar-card-title">PAM Software</p>
+          <span class="skill-tag">PAMguard</span>
+          <span class="skill-tag">Resonance</span>
+          <span class="skill-tag">QuietSea</span>
+          <span class="skill-tag">Spectrogram</span>
+        </div>
+        <div class="sidebar-card">
+          <p class="sidebar-card-title">Field Skills</p>
+          <span class="skill-tag">Species ID — Cetaceans</span>
+          <span class="skill-tag">Sea Turtle ID</span>
+          <span class="skill-tag">Seismic Operations</span>
+          <span class="skill-tag">Shutdown Protocols</span>
+          <span class="skill-tag">BOEM / BSEE Reporting</span>
+          <span class="skill-tag">BiOp Compliance</span>
+          <span class="skill-tag">Passive Acoustics</span>
+        </div>
+        <div class="sidebar-card">
+          <p class="sidebar-card-title">Research Skills</p>
+          <span class="skill-tag">GIS / QGIS</span>
+          <span class="skill-tag">Urban Ecology</span>
+          <span class="skill-tag">Environmental Justice</span>
+          <span class="skill-tag">Spatial Analysis</span>
+          <span class="skill-tag">Applied Social Science</span>
+        </div>
+        <div class="sidebar-card">
+          <p class="sidebar-card-title">Photography</p>
+          <span class="skill-tag">Sony Alpha a7 III</span>
+          <span class="skill-tag">Sigma 60–600mm</span>
+          <span class="skill-tag">Wildlife / Telephoto</span>
+          <span class="skill-tag">Urban / Documentary</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div id="stats-bar">
+  <div class="stats-row">
+    <div class="stat-item reveal">
+      <span class="stat-n">2,000+</span>
+      <span class="stat-l">Offshore Days</span>
+    </div>
+    <div class="stat-item reveal reveal-delay-1">
+      <span class="stat-n">10+</span>
+      <span class="stat-l">Years Active</span>
+    </div>
+    <div class="stat-item reveal reveal-delay-2">
+      <span class="stat-n">3</span>
+      <span class="stat-l">NMFS Survey Tiers</span>
+    </div>
+    <div class="stat-item reveal reveal-delay-3">
+      <span class="stat-n">4+</span>
+      <span class="stat-l">Peer-reviewed Works</span>
+    </div>
+  </div>
+</div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-wrap">
+    <p class="section-eyebrow">Professional Record</p>
+    <h2 class="section-title">Experience</h2>
+    <div class="exp-list">
+
+      <div class="exp-item reveal">
+        <div class="exp-period">2014 — Present</div>
+        <div>
+          <div class="exp-title">Protected Species Observer / PAM Operator</div>
+          <div class="exp-org">Multiple Operators — Gulf of Mexico, Atlantic, Pacific, West Africa</div>
+          <p class="exp-body">Real-time cetacean and sea turtle observation during active geophysical surveys. PAM deployment, monitoring and reporting using PAMguard, Resonance, QuietSea, and Spectrogram. Tier 1–3 operations under NMFS unconditional approval. Responsible for shutdown protocols, soft-start management, and daily marine mammal sighting reports for BOEM and BSEE compliance.</p>
+          <div class="exp-tags">
+            <span class="exp-tag">NMFS Tier 1–3</span>
+            <span class="exp-tag">PAMguard</span>
+            <span class="exp-tag">Resonance</span>
+            <span class="exp-tag">QuietSea</span>
+            <span class="exp-tag">BOEM / BSEE</span>
+            <span class="exp-tag">BiOp Compliance</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-item reveal reveal-delay-1">
+        <div class="exp-period">2020 — 2022</div>
+        <div>
+          <div class="exp-title">Environmental Researcher</div>
+          <div class="exp-org">El Colegio de la Frontera Norte (COLEF)</div>
+          <p class="exp-body">Graduate research on urban park distribution and environmental justice in Tijuana and Mexico City. GIS spatial analysis linking green infrastructure access to socioeconomic indicators. Co-authored peer-reviewed book chapters on urban ecology and applied social science methodology.</p>
+          <div class="exp-tags">
+            <span class="exp-tag">GIS / QGIS</span>
+            <span class="exp-tag">Urban Ecology</span>
+            <span class="exp-tag">Environmental Justice</span>
+            <span class="exp-tag">Applied Social Science</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-item reveal reveal-delay-2">
+        <div class="exp-period">2013 — 2014</div>
+        <div>
+          <div class="exp-title">Marine Mammal Observer — Trainee</div>
+          <div class="exp-org">Offshore Operations — Gulf of Mexico</div>
+          <p class="exp-body">Initial field rotations under senior PSO supervision during 2D and 3D seismic programs. Built foundational species identification, watchkeeping protocols, and passive acoustic fundamentals preceding full NMFS unconditional approval.</p>
+          <div class="exp-tags">
+            <span class="exp-tag">Species ID</span>
+            <span class="exp-tag">Seismic Operations</span>
+            <span class="exp-tag">Watchkeeping</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-wrap">
+    <p class="section-eyebrow">Academic Background</p>
+    <h2 class="section-title">Education</h2>
+    <div class="edu-grid">
+      <div class="edu-card reveal">
+        <div class="edu-degree">M.A. in International Environmental Management <em style="font-style:italic;color:var(--ink-lt);font-size:0.88em;">(M.A.I.A.)</em></div>
+        <div class="edu-institution">El Colegio de la Frontera Norte — COLEF</div>
+        <div class="edu-year">Graduated 2022 · Tijuana, Mexico</div>
+      </div>
+      <div class="edu-card reveal reveal-delay-1">
+        <div class="edu-degree">Bachelor of Science in Biology</div>
+        <!-- UPDATE: replace institution name below -->
+        <div class="edu-institution">UABC — Universidad Autónoma de Baja California</div>
+        <div class="edu-year">Ensenada, Mexico</div>
+      </div>
+      <div class="edu-card reveal reveal-delay-2">
+        <div class="edu-degree">PSO Unconditional Approval — All Survey Tiers</div>
+        <div class="edu-institution">National Marine Fisheries Service (NMFS)</div>
+        <div class="edu-year">Tiers 1, 2, 3 — All geophysical survey categories</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- PUBLICATIONS -->
+<section id="publications">
+  <div class="section-wrap">
+    <p class="section-eyebrow">Research Output</p>
+    <h2 class="section-title">Publications</h2>
+    <div class="pub-list">
+      <div class="pub-item reveal">
+        <div class="pub-year">2022</div>
+        <div>
+          <!-- UPDATE: replace with exact title -->
+          <p class="pub-title">Urban Green Infrastructure and Environmental Justice: A Spatial Analysis of Park Distribution in Mexico City</p>
+          <p class="pub-source">Peer-reviewed book chapter · COLEF Academic Series</p>
+        </div>
+      </div>
+      <div class="pub-item reveal reveal-delay-1">
+        <div class="pub-year">2022</div>
+        <div>
+          <!-- UPDATE: replace with exact title -->
+          <p class="pub-title">Applied Social Science Methods in Urban Ecology Research</p>
+          <p class="pub-source">Peer-reviewed book chapter · COLEF Academic Series</p>
+        </div>
+      </div>
+      <div class="pub-item reveal reveal-delay-2">
+        <div class="pub-year">2014</div>
+        <div>
+          <p class="pub-title">Applied research reports — Observatorio Turístico de Baja California</p>
+          <p class="pub-source">Ecotourism, wine tourism, cruise tourism · COLEF, 2012–2015</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CV DOWNLOAD -->
+<div id="cv-section">
+  <div class="cv-inner">
+    <div class="cv-text">
+      <p class="section-eyebrow light" style="margin-bottom:0.5rem;">Curriculum Vitae</p>
+      <h2>Full professional record,<br>available for download.</h2>
+      <p>Integrated CV covering offshore field operations, NMFS approvals, academic credentials, and full publication record. Updated for current contract cycles.</p>
+    </div>
+    <div class="cv-buttons">
+      <!-- UPDATE: set href to actual PDF path -->
+      <a href="files/Huizar_Contreras_CV.pdf" class="btn btn-sunset" download>↓ Download CV (PDF)</a>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-wrap">
+    <p class="section-eyebrow">Get in Touch</p>
+    <h2 class="section-title">Contact</h2>
+    <div class="contact-grid">
+      <div class="reveal">
+        <p class="contact-intro">Available for PSO and PAM operator roles in geophysical survey programs. Based in Mexico City; rotational offshore scheduling. Responding to recruiters, project managers, and print collectors directly.</p>
+      </div>
+      <div class="contact-links reveal reveal-delay-1">
+        <!-- UPDATE: replace all placeholder values -->
+        <a href="mailto:your@email.com" class="contact-link">
+          <div>
+            <div class="contact-link-label">Email</div>
+            <div class="contact-link-val">your@email.com</div>
+          </div>
+          <span class="c-arrow">→</span>
+        </a>
+        <a href="https://linkedin.com/in/yourprofile" class="contact-link" target="_blank" rel="noopener">
+          <div>
+            <div class="contact-link-label">LinkedIn</div>
+            <div class="contact-link-val">linkedin.com/in/yourprofile</div>
+          </div>
+          <span class="c-arrow">→</span>
+        </a>
+        <a href="https://orcid.org/your-orcid" class="contact-link" target="_blank" rel="noopener">
+          <div>
+            <div class="contact-link-label">ORCID</div>
+            <div class="contact-link-val">orcid.org/your-orcid</div>
+          </div>
+          <span class="c-arrow">→</span>
+        </a>
+        <div class="contact-link" style="cursor:default;">
+          <div>
+            <div class="contact-link-label">Location</div>
+            <div class="contact-link-val">Mexico City, Mexico</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Heber Huizar Contreras</div>
+  <nav class="footer-nav">
+    <a href="index.html">Home</a>
+    <a href="gallery.html">Shop Prints</a>
+    <a href="about.html">About</a>
+    <a href="#contact">Contact</a>
+    <a href="files/Huizar_Contreras_CV.pdf" download>Download CV</a>
+  </nav>
+  <span class="footer-copy">© 2025 Heber Huizar Contreras · Mexico City</span>
+</footer>
+
+<script>
+const revealEls = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+}, { threshold: 0.08 });
+revealEls.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
