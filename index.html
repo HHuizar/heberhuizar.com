@@ -78,7 +78,7 @@
 .featured-header { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 3rem; }
 .featured-strip { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 6px; height: 420px; }
 .fs-photo { position: relative; overflow: hidden; border-radius: 4px; cursor: pointer; }
-.fs-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; transition: transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94); }
+.fs-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; transition: transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94); } .fs-photo:nth-child(3) img { object-position: 30% 70%; }
 .fs-photo:hover img { transform: scale(1.06); }
 .fs-photo:nth-child(1) { background: linear-gradient(135deg, #13527a, #1b78a5); }
 .fs-photo:nth-child(2) { background: linear-gradient(135deg, #274258, #3aa0cc); }
@@ -205,7 +205,7 @@
         <img src="feature-02.jpg" alt="Sunset — Atlantic survey">
         <div class="fs-label">Sunset — Atlantic</div>
       </div>
-      <div class="fs-photo" data-src="feature-03.jpg" data-caption="Survey watch — sunset">
+      <div class="fs-photo" data-src="feature-03.jpg" data-caption="Emperor penguins — Antarctica">
         <img src="feature-03.jpg" alt="Emperor penguins — Antarctica">
         <div class="fs-label">Emperor penguins — Antarctica</div>
       </div>
