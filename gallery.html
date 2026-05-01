@@ -17,9 +17,12 @@
 .ghero-bg {
   position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 15% 80%, rgba(30,120,165,0.3) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 85% 20%, rgba(232,109,70,0.18) 0%, transparent 60%),
-    linear-gradient(160deg, #0c2b3f 0%, #0f3e5c 50%, #0c2b3f 100%);
+    linear-gradient(90deg,
+      rgba(12,43,63,1) 0%,
+      rgba(12,43,63,0.92) 30%,
+      rgba(12,43,63,0.5) 55%,
+      rgba(12,43,63,0.15) 100%),
+    url('gallery-bg.jpg') center 60% / cover no-repeat;
 }
 .ghero-content { position: relative; z-index: 1; max-width: var(--max-w); margin: 0 auto; width: 100%; }
 .ghero-eyebrow {
