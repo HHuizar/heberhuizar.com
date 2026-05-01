@@ -261,7 +261,7 @@
               </div>
               <div class="photo-price"><small>from</small>$85</div>
             </div>
-            <button class="btn-add">Add to Cart</button>
+            <button class="btn-add">Buy This Print</button>
           </div>
         </div>
       </div>
@@ -284,7 +284,7 @@
               </div>
               <div class="photo-price"><small>from</small>$75</div>
             </div>
-            <button class="btn-add">Add to Cart</button>
+            <button class="btn-add">Buy This Print</button>
           </div>
         </div>
       </div>
@@ -306,7 +306,7 @@
               </div>
               <div class="photo-price"><small>from</small>$70</div>
             </div>
-            <button class="btn-add">Add to Cart</button>
+            <button class="btn-add">Buy This Print</button>
           </div>
         </div>
       </div>
@@ -328,7 +328,7 @@
               </div>
               <div class="photo-price"><small>from</small>$65</div>
             </div>
-            <button class="btn-add">Add to Cart</button>
+            <button class="btn-add">Buy This Print</button>
           </div>
         </div>
       </div>
@@ -350,7 +350,7 @@
               </div>
               <div class="photo-price"><small>from</small>$65</div>
             </div>
-            <button class="btn-add">Add to Cart</button>
+            <button class="btn-add">Buy This Print</button>
           </div>
         </div>
       </div>
@@ -372,7 +372,7 @@
               </div>
               <div class="photo-price"><small>from</small>$70</div>
             </div>
-            <button class="btn-add">Add to Cart</button>
+            <button class="btn-add">Buy This Print</button>
           </div>
         </div>
       </div>
@@ -395,7 +395,7 @@
               </div>
               <div class="photo-price"><small>from</small>$110</div>
             </div>
-            <button class="btn-add">Add to Cart</button>
+            <button class="btn-add">Buy This Print</button>
           </div>
         </div>
       </div>
@@ -416,7 +416,7 @@
               </div>
               <div class="photo-price"><small>from</small>$60</div>
             </div>
-            <button class="btn-add">Add to Cart</button>
+            <button class="btn-add">Buy This Print</button>
           </div>
         </div>
       </div>
@@ -439,7 +439,7 @@
               </div>
               <div class="photo-price"><small>from</small>$90</div>
             </div>
-            <button class="btn-add">Add to Cart</button>
+            <button class="btn-add">Buy This Print</button>
           </div>
         </div>
       </div>
@@ -447,7 +447,7 @@
     </div>
 
     <div class="shop-note">
-      <strong>Custom orders &amp; licensing:</strong> All prints are archival-quality Giclée on 100% cotton rag paper. Custom sizes, canvas, and metal prints available on request. Commercial licensing for editorial and scientific use also available. Contact directly at <strong>huizar.c@gmail.com</strong>.
+      <strong>How to order:</strong> Select your preferred size, then click <em>Buy This Print</em>. Your email app will open with a pre-filled message — just send it and I will reply within 48 hours with payment details via PayPal. Once payment is confirmed, your print ships within 7–10 business days in rigid protective packaging with tracking. For custom sizes, canvas, metal prints, or commercial licensing contact <strong>huizar.c@gmail.com</strong> directly.
     </div>
   </div>
 </div>
@@ -511,14 +511,24 @@ document.querySelectorAll('.photo-sizes').forEach(container => {
   });
 });
 
-// Add to cart feedback
+// Buy button — opens pre-filled email
 document.querySelectorAll('.btn-add').forEach(btn => {
   btn.addEventListener('click', e => {
     e.stopPropagation();
-    const orig = btn.textContent;
-    btn.textContent = '✓ Added';
-    btn.classList.add('added');
-    setTimeout(() => { btn.textContent = orig; btn.classList.remove('added'); }, 1800);
+    const card = btn.closest('.photo-card');
+    const title = card.querySelector('.photo-title').textContent;
+    const location = card.querySelector('.photo-location').textContent.trim();
+    const selectedSize = card.querySelector('.size-opt.selected');
+    const size = selectedSize ? selectedSize.textContent : 'size not selected';
+    const subject = encodeURIComponent('Print Order: ' + title);
+    const body = encodeURIComponent(
+      'Hi Heber,\n\nI would like to order the following print:\n\n' +
+      'Photo: ' + title + '\n' +
+      'Location: ' + location + '\n' +
+      'Size: ' + size + '\n\n' +
+      'Please send me payment details.\n\nThank you.'
+    );
+    window.location.href = 'mailto:huizar.c@gmail.com?subject=' + subject + '&body=' + body;
   });
 });
 
