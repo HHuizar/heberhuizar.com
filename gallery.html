@@ -228,6 +228,18 @@
 <div id="shop">
   <div class="shop-inner">
 
+    <!-- Order Bar -->
+    <div id="order-bar" style="display:none; margin-bottom:2rem; padding:1.25rem 1.75rem; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-left:3px solid var(--peach); border-radius:var(--r); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+      <div>
+        <span id="order-count" style="font-family:var(--serif);font-size:1.4rem;font-weight:400;color:var(--golden);margin-right:0.75rem;">0</span>
+        <span style="font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--cloud);">prints selected</span>
+      </div>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+        <button id="clear-order" style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:0.65em 1.4em;border-radius:var(--r);background:transparent;color:var(--cloud);border:1px solid rgba(255,255,255,0.2);cursor:pointer;">Clear</button>
+        <button id="send-order" style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:0.65em 1.75em;border-radius:var(--r);background:var(--coral);color:#fff;border:none;cursor:pointer;">Send Order →</button>
+      </div>
+    </div>
+
     <!-- Filters -->
     <div class="shop-filters">
       <button class="filter-btn active" onclick="filterPhotos('all', this)">All</button>
@@ -265,7 +277,7 @@
               </div>
               <div class="photo-price"><small>from</small>$85</div>
             </div>
-            <button class="btn-add">Buy This Print</button>
+            <button class="btn-add">Add to Order</button>
           </div>
         </div>
       </div>
@@ -288,7 +300,7 @@
               </div>
               <div class="photo-price"><small>from</small>$75</div>
             </div>
-            <button class="btn-add">Buy This Print</button>
+            <button class="btn-add">Add to Order</button>
           </div>
         </div>
       </div>
@@ -310,7 +322,7 @@
               </div>
               <div class="photo-price"><small>from</small>$70</div>
             </div>
-            <button class="btn-add">Buy This Print</button>
+            <button class="btn-add">Add to Order</button>
           </div>
         </div>
       </div>
@@ -332,7 +344,7 @@
               </div>
               <div class="photo-price"><small>from</small>$65</div>
             </div>
-            <button class="btn-add">Buy This Print</button>
+            <button class="btn-add">Add to Order</button>
           </div>
         </div>
       </div>
@@ -354,7 +366,7 @@
               </div>
               <div class="photo-price"><small>from</small>$65</div>
             </div>
-            <button class="btn-add">Buy This Print</button>
+            <button class="btn-add">Add to Order</button>
           </div>
         </div>
       </div>
@@ -376,7 +388,7 @@
               </div>
               <div class="photo-price"><small>from</small>$70</div>
             </div>
-            <button class="btn-add">Buy This Print</button>
+            <button class="btn-add">Add to Order</button>
           </div>
         </div>
       </div>
@@ -399,7 +411,7 @@
               </div>
               <div class="photo-price"><small>from</small>$110</div>
             </div>
-            <button class="btn-add">Buy This Print</button>
+            <button class="btn-add">Add to Order</button>
           </div>
         </div>
       </div>
@@ -420,7 +432,7 @@
               </div>
               <div class="photo-price"><small>from</small>$60</div>
             </div>
-            <button class="btn-add">Buy This Print</button>
+            <button class="btn-add">Add to Order</button>
           </div>
         </div>
       </div>
@@ -443,7 +455,7 @@
               </div>
               <div class="photo-price"><small>from</small>$90</div>
             </div>
-            <button class="btn-add">Buy This Print</button>
+            <button class="btn-add">Add to Order</button>
           </div>
         </div>
       </div>
@@ -497,6 +509,7 @@
 </footer>
 
 <script>
+// Scroll reveal
 const revealEls = document.querySelectorAll('.reveal');
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
@@ -513,25 +526,63 @@ document.querySelectorAll('.photo-sizes').forEach(container => {
   });
 });
 
-// Buy button — opens pre-filled email
+// Order system
+const order = [];
+
+function updateOrderBar() {
+  const bar = document.getElementById('order-bar');
+  const count = document.getElementById('order-count');
+  count.textContent = order.length;
+  bar.style.display = order.length > 0 ? 'flex' : 'none';
+}
+
 document.querySelectorAll('.btn-add').forEach(btn => {
   btn.addEventListener('click', e => {
     e.stopPropagation();
     const card = btn.closest('.photo-card');
-    const title = card.querySelector('.photo-title').textContent;
+    const title = card.querySelector('.photo-title').textContent.trim();
     const location = card.querySelector('.photo-location').textContent.trim();
     const selectedSize = card.querySelector('.size-opt.selected');
-    const size = selectedSize ? selectedSize.textContent : 'size not selected';
-    const subject = encodeURIComponent('Print Order: ' + title);
-    const body = encodeURIComponent(
-      'Hi Heber,\n\nI would like to order the following print:\n\n' +
-      'Photo: ' + title + '\n' +
-      'Location: ' + location + '\n' +
-      'Size: ' + size + '\n\n' +
-      'Please send me payment details.\n\nThank you.'
-    );
-    window.location.href = 'mailto:huizar.c@gmail.com?subject=' + subject + '&body=' + body;
+    const size = selectedSize ? selectedSize.textContent.trim() : 'size not selected';
+    const price = card.querySelector('.photo-price').textContent.replace('from', '').trim();
+
+    // Check if already in order
+    const existing = order.findIndex(i => i.title === title);
+    if (existing > -1) {
+      order[existing].size = size;
+      btn.textContent = '✓ Updated';
+    } else {
+      order.push({ title, location, size, price });
+      btn.textContent = '✓ Added';
+    }
+
+    btn.style.background = '#2a7a52';
+    setTimeout(() => {
+      btn.textContent = 'Add to Order';
+      btn.style.background = '';
+    }, 1800);
+
+    updateOrderBar();
   });
+});
+
+document.getElementById('clear-order').addEventListener('click', () => {
+  order.length = 0;
+  updateOrderBar();
+});
+
+document.getElementById('send-order').addEventListener('click', () => {
+  if (order.length === 0) return;
+  const itemList = order.map((item, i) =>
+    (i + 1) + '. ' + item.title + ' — ' + item.location + '\n   Size: ' + item.size + ' · ' + item.price
+  ).join('\n\n');
+  const subject = encodeURIComponent('Print Order — ' + order.length + ' item' + (order.length > 1 ? 's' : ''));
+  const body = encodeURIComponent(
+    'Hi Heber,\n\nI would like to order the following print' + (order.length > 1 ? 's' : '') + ':\n\n' +
+    itemList + '\n\n' +
+    'Please send me payment details.\n\nThank you.'
+  );
+  window.location.href = 'mailto:huizar.c@gmail.com?subject=' + subject + '&body=' + body;
 });
 
 // Filter
